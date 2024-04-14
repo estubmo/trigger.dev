@@ -115,15 +115,15 @@ export class JobListPresenter {
         }[]
       >`
         SELECT * FROM (
-          SELECT 
-              "id", 
-              "createdAt", 
-              "status", 
+          SELECT
+              "id",
+              "createdAt",
+              "status",
               "jobId",
               ROW_NUMBER() OVER(PARTITION BY "jobId" ORDER BY "createdAt" DESC) as rn
-          FROM 
-              "JobRun" 
-          WHERE 
+          FROM
+              "triggerdotdev"."JobRun"
+          WHERE
               "jobId" IN (${Prisma.join(jobs.map((j) => j.id))})
       ) t
       WHERE rn = 1;`;
