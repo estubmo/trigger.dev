@@ -8,13 +8,13 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       short_sha: ${{ steps.get_commit.outputs.sha_short }}
     steps:
-      - name: Setup Depot CLI
-        uses: depot/setup-action@v1
-
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
         with:
@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🐳 Build image and push to GitHub Container Registry
-        uses: depot/build-push-action@v1
+        uses: docker/build-push-action@v3
         with:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
